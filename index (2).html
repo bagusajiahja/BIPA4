@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pasar Kata: Game Kata Hubung BIPA 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap">
+<style>
+:root{--bg:#0F3D3E;--ink:#1B1209;--red:#E63946;--gold:#FFC93C;--paper:#FFF9E6;--teal:#1F8A8A}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Baloo 2","Trebuchet MS",Arial,sans-serif;color:var(--ink);background-color:var(--bg);
+background-image:radial-gradient(circle at 0 0,transparent 22px,rgba(255,201,60,.14) 23px 26px,transparent 27px),radial-gradient(circle at 100% 0,transparent 22px,rgba(255,201,60,.14) 23px 26px,transparent 27px),radial-gradient(circle at 0 100%,transparent 22px,rgba(255,201,60,.14) 23px 26px,transparent 27px),radial-gradient(circle at 100% 100%,transparent 22px,rgba(255,201,60,.14) 23px 26px,transparent 27px);background-size:64px 64px}
+.awning{background:repeating-linear-gradient(90deg,var(--red) 0 38px,#fff 38px 76px);border-bottom:8px solid var(--ink);box-shadow:0 10px 0 var(--gold);padding:16px 12px 22px;text-align:center}
+.awning h1{margin:0;display:inline-block;background:var(--ink);color:var(--gold);font-weight:800;font-size:clamp(30px,7vw,52px);line-height:1.1;padding:4px 26px 8px;border-radius:16px;box-shadow:0 5px 0 rgba(0,0,0,.35);transform:rotate(-1.5deg)}
+main{max-width:720px;margin:34px auto 60px;padding:0 14px}
+.card{background:var(--paper);border:4px solid var(--ink);border-radius:26px;padding:22px;box-shadow:0 8px 0 var(--ink);animation:pop .35s}
+@keyframes pop{from{transform:scale(.94);opacity:0}}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:16px;font-weight:700;color:var(--paper);font-size:18px}
+.pill{background:var(--gold);color:var(--ink);padding:2px 16px;border-radius:999px;border:3px solid var(--ink)}
+.mt{border:0;background:none;font-size:26px;cursor:pointer}
+button{font-family:inherit}
+button:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
+.btn{display:block;width:100%;margin-top:14px;border:4px solid var(--ink);border-radius:18px;background:var(--red);color:#fff;font-size:22px;font-weight:800;padding:8px 14px;cursor:pointer;box-shadow:0 6px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--ink)}
+.opt{display:block;width:100%;margin-top:12px;text-align:left;background:#fff;border:3px solid var(--ink);border-radius:16px;font-size:20px;font-weight:600;line-height:1.3;padding:10px 16px;cursor:pointer;box-shadow:0 5px 0 var(--ink);transition:transform .1s,background .15s}
+.opt:hover:not(:disabled){background:#FFF1B8}
+.opt:active:not(:disabled){transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.opt.right{background:#C6F0C2;border-color:#1B6B2F}
+.opt.wrong{background:#FFD0D0;border-color:var(--red)}
+.bar{height:16px;background:#E8DCB5;border:3px solid var(--ink);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teal);transition:width .5s}
+.stage{font-size:25px;line-height:1.45;margin:16px 0 6px;font-weight:600}
+.who{margin:10px 0 0;font-size:16px;color:#5b4a2e}
+.blank{display:inline-block;min-width:130px;border-bottom:4px dashed var(--red);text-align:center;color:var(--red);font-weight:800}
+.scene{display:flex;align-items:flex-end;gap:12px;margin:16px 0 10px}
+.face{font-size:68px;line-height:1;animation:bob 2.2s infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.bubble{flex:1;background:#fff;border:3px solid var(--ink);border-radius:20px 20px 20px 4px;padding:10px 16px;font-size:21px;line-height:1.35}
+.status{display:flex;align-items:center;gap:12px}
+.board{white-space:nowrap;background:var(--ink);color:var(--gold);border-radius:12px;padding:2px 14px;font-weight:800;font-size:24px}
+.mood{flex:1;height:18px;background:#E8DCB5;border:3px solid var(--ink);border-radius:10px;overflow:hidden}
+.mood i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--gold),#43B85C);transition:width .5s}
+.slot{border:3px dashed #B7A57A;border-radius:14px;padding:8px 14px;margin-top:10px;min-height:56px;font-size:19px;line-height:1.3}
+.slot.on{border:3px solid var(--teal);background:#DDF3F1}
+.slot small{display:block;color:var(--red);font-weight:800;font-size:15px}
+.fb{margin-top:16px;padding:10px 16px;border-radius:14px;font-size:19px;line-height:1.35;border:3px solid var(--ink)}
+.fb.g{background:#C6F0C2}.fb.r{background:#FFD9D0}
+.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.mas{font-size:50px;text-align:center;letter-spacing:6px;animation:bob 2.6s infinite}
+h2{font-size:32px;line-height:1.15;margin:8px 0}
+.card p{font-size:20px;line-height:1.4;margin:8px 0}
+.lv{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px}
+.lv li{background:#fff;border:3px solid var(--ink);border-radius:14px;padding:6px 14px;font-size:19px;line-height:1.3}
+.lv b{display:block;font-size:21px}
+.big{font-size:84px;text-align:center;line-height:1.1;animation:bob 1.6s infinite}
+.card h2,.card .big{text-align:center}
+@keyframes trem{25%{transform:translateX(-4px) rotate(-4deg)}75%{transform:translateX(4px) rotate(4deg)}}
+.facewrap{position:relative;flex:none;width:170px;height:190px;border:4px solid var(--ink);border-radius:24px;overflow:hidden;box-shadow:0 6px 0 var(--ink);transition:background .4s}
+.react{position:absolute;top:6px;right:12px;font-size:44px;font-weight:800;animation:fl 1.3s forwards}
+.react.bad{color:#fff;text-shadow:0 0 6px var(--ink),2px 2px 0 var(--ink)}.react.good{color:#FF5C8A;text-shadow:2px 2px 0 var(--ink)}
+@keyframes fl{to{transform:translateY(-30px) scale(1.4);opacity:0}}
+.ch{width:100%;height:100%;display:block;filter:drop-shadow(0 6px 4px rgba(0,0,0,.35))}
+.ch *{transition:transform .35s ease,opacity .3s}
+.ch .bd{transform-origin:120px 250px;animation:br 3s ease-in-out infinite}@keyframes br{50%{transform:scaleY(1.015)}}
+.ch .hd{transform-origin:120px 170px;animation:idle 4s ease-in-out infinite}@keyframes idle{50%{transform:rotate(-1.4deg)}}
+.ch[data-s="0"] .hd{animation:trem .28s infinite}.ch[data-s="4"] .hd{animation:nod 1s infinite}
+@keyframes nod{50%{transform:translateY(-3px) rotate(1.6deg)}}
+.ch{--ey:1;--bo:0deg;--by:93px;--bu:.12;--tn:0}
+.ch[data-s="4"]{--bo:-4deg;--by:86px;--bu:.8}.ch[data-s="3"]{--bo:-2deg;--by:90px;--bu:.45}
+.ch[data-s="1"]{--ey:.72;--bo:13deg;--by:95px;--bu:.05;--tn:.14}.ch[data-s="0"]{--ey:.58;--bo:27deg;--by:98px;--bu:0;--tn:.4}
+#eL{transform:translate(97px,112px) scaleY(var(--ey))}#eR{transform:translate(143px,112px) scaleY(var(--ey))}
+.ch[data-s="4"] #eL,.ch[data-s="4"] #eR{opacity:0}
+#bl{transform:translate(95px,var(--by)) rotate(var(--bo))}#br{transform:translate(145px,var(--by)) rotate(calc(var(--bo)*-1))}
+.bu{opacity:var(--bu)}.tn{opacity:var(--tn)}
+.bk{transform-box:fill-box;transform-origin:center;animation:bk 4.2s infinite}@keyframes bk{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+.mo,.ha,.vn,.sm,.st{opacity:0}
+.ch[data-s="0"] .m0,.ch[data-s="1"] .m1,.ch[data-s="2"] .m2,.ch[data-s="3"] .m3,.ch[data-s="4"] .m4,.ch[data-s="4"] .ha{opacity:1}
+.ch[data-s="0"] .vn{opacity:1}.ch[data-s="0"] .sm{opacity:1;animation:rise 1.2s infinite}
+@keyframes rise{from{transform:translateY(0)}to{transform:translateY(-22px);opacity:0}}
+.ch[data-s="4"] .st{opacity:1;animation:tw 1s infinite alternate}.st{transform-box:fill-box;transform-origin:center}
+@keyframes tw{from{transform:scale(.6)}to{transform:scale(1.2)}}
+.offer{background:#fff;border:3px solid var(--ink);border-radius:16px;padding:6px 16px 10px;text-align:center}
+.offer b{display:block;font-size:34px;color:var(--red);line-height:1.2}
+.offer input{width:100%;accent-color:var(--red);height:30px}
+.status>span:not(.board){font-size:15px;font-weight:700}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:9}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="awning"><h1>Pasar Kata</h1></div>
+<main id="app"></main>
+<canvas id="fx"></canvas>
+<script>
+const $=s=>document.querySelector(s),app=$('#app'),sh=a=>[...a].sort(()=>Math.random()-.5);
+let S={tot:0},mute=false,best=0;
+try{best=+localStorage.getItem('pk_best')||0}catch(e){}
+const AC=window.AudioContext||window.webkitAudioContext;let ac;
+function snd(f,d=.14,t='sine'){if(mute||!AC)return;try{ac=ac||new AC();const o=ac.createOscillator(),g=ac.createGain();o.type=t;o.frequency.value=f;g.gain.value=.07;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.stop(ac.currentTime+d)}catch(e){}}
+const ok=()=>{snd(660);setTimeout(()=>snd(880),90)},bad=()=>snd(170,.25,'sawtooth');
+function conf(){const c=$('#fx'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const P=Array.from({length:130},()=>({x:Math.random()*c.width,y:-20-Math.random()*200,v:2+Math.random()*4,s:6+Math.random()*8,c:['#E63946','#FFC93C','#1F8A8A','#FFF9E6'][Math.random()*4|0],r:Math.random()*6}));let n=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.y+=p.v;p.x+=Math.sin(p.y/30);p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(0,0,p.s,p.s*.6);x.restore()});if(++n<240)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
+const rp=n=>'Rp '+n.toLocaleString('id-ID');
+const L1=[
+["Harga cabai naik ___ hujan terus.","akibat","meskipun","sebaliknya","Akibat diikuti penyebab, yaitu hujan terus."],
+["___ hujan deras, pasar tetap ramai.","Meskipun","Sebab","Akibatnya","Meskipun menghubungkan dua hal yang tampak berlawanan: hujan deras, tetapi pasar ramai."],
+["Saya suka nopia. ___, saya tidak suka yang terlalu manis.","Namun","Sebab","Meskipun","Namun membuka sisi lain di awal kalimat baru dan diikuti koma."],
+["Saya tidak jadi membeli ___ harganya terlalu mahal.","sebab","namun","bagaimanapun","Sebab menyambung alasan dalam satu kalimat."],
+["Di pasar kita bisa menawar. ___, di swalayan harganya sudah pasti.","Sebaliknya","Sebab","Walaupun","Sebaliknya menunjukkan hal yang berlawanan dengan kalimat sebelumnya."],
+["___, keputusan ada pada pembeli.","Bagaimanapun","Sebab","Meskipun","Bagaimanapun dipakai untuk menutup pendapat, artinya apa pun keadaannya."],
+["___ mahal, saya beli dua kotak.","Walaupun","Akibat","Namun","Walaupun sama dengan meskipun: bagian yang mengalah, lalu bagian utama."],
+["Hujan seharian. ___, pasar sepi.","Akibatnya","Meskipun","Sebab","Akibatnya di awal kalimat menyatakan hasil dari kalimat sebelumnya."]];
+const L3=[["Topik: belanja di pasar",["Saya berpendapat bahwa belanja di pasar lebih menyenangkan.","Saya berpikir begitu sebab kita bisa menawar dan mengobrol dengan penjual.","Namun, pasar kadang becek dan sempit.","Bagaimanapun, pasar tetap pilihan saya."]],
+["Topik: belanja daring",["Saya berpendapat bahwa belanja daring lebih praktis.","Saya berpikir begitu sebab kita tidak perlu keluar rumah.","Namun, barang yang datang kadang tidak sesuai foto.","Bagaimanapun, belanja daring cocok saat hujan deras."]]];
+const LB=['Pendapat','Alasan','Sisi lain','Penutup'],Q=[()=>q1(),()=>q2(),()=>q3()];
+function hud(){return `<div class="hud"><span class="pill">Level ${S.lv+1} dari 3</span><span>${'❤️'.repeat(S.h)}${'🖤'.repeat(3-S.h)}</span><span class="pill">🪙 ${S.sc}</span><button class="mt" onclick="tg()" aria-label="Suara">${mute?'🔇':'🔊'}</button></div>`}
+function view(h){app.innerHTML=hud()+`<section class="card">${h}</section>`}
+function tg(){mute=!mute;$('.mt').textContent=mute?'🔇':'🔊'}
+function shk(){const c=$('.card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake')}
+function home(){app.innerHTML=`<section class="card"><div class="mas">🥥👵🍪🧑</div><h2>Petualangan kata hubung di Pasar Banyumas</h2><p>Jadilah pembeli cerdas. Pilih kata hubung yang tepat, tawar nopia dengan sopan, dan susun pendapat yang baik.</p><ul class="lv"><li><b>Lapak kata hubung</b>Pilih kata yang tepat, 8 lapak</li><li><b>Tawar-menawar dengan Bu Sri</b>Tentukan harga dan nada bicara, lihat ekspresi penjual</li><li><b>Susun pendapat</b>Urutkan empat langkah, 2 topik</li></ul><button class="btn" onclick="S={tot:0};go(0)">Mulai berdagang</button><p class="who">Skor terbaik di perangkat ini: ${best}</p></section>`}
+function go(l){S.tot=l?S.tot:0;S.lv=l;S.i=0;S.h=3;S.sc=S.tot;S.st=0;S.mood=50;S.pr=30000;S.n=[8,5,2][l];S.qs=[sh(L1),[],L3][l];S.ask=30000;S.nd=0;Q[l]()}
+function bar(){return `<div class="bar"><i style="width:${S.i/S.n*100}%"></i></div>`}
+function fb(c,t,l){$('#fb').innerHTML=`<div class="fb ${c?'g':'r'}"><b>${l||(c?'Tepat!':'Belum tepat.')}</b> ${t}</div><button class="btn" onclick="nx()">Lanjut</button>`;$('.btn').scrollIntoView({block:'nearest',behavior:'smooth'})}
+function nx(){S.i++;if(S.h<=0)return fail();if(S.i>=S.n)return done();Q[S.lv]()}
+function q1(){const d=S.qs[S.i],o=sh([[d[1],1],[d[2],0],[d[3],0]]);S.d=d;view(`${bar()}<p class="who">Lapak ${S.i+1} dari ${S.n}</p><p class="stage">${d[0].replace('___','<span class="blank" id="bl">&nbsp;</span>')}</p>${o.map(x=>`<button class="opt" onclick="a1(this,${x[1]})">${x[0]}</button>`).join('')}<div id="fb"></div>`)}
+function a1(b,c){const d=S.d,os=document.querySelectorAll('.opt');os.forEach(x=>x.disabled=true);b.className+=c?' right':' wrong';if(c){S.sc+=100+10*S.st++;ok()}else{S.h--;S.st=0;bad();shk();os.forEach(x=>{if(x.textContent==d[1])x.className+=' right'})}$('#bl').textContent=d[1];fb(c,d[4]);upd()}
+function upd(){document.querySelectorAll('.pill')[1].textContent='🪙 '+S.sc;document.querySelector('.hud span:nth-child(2)').textContent='❤️'.repeat(Math.max(S.h,0))+'🖤'.repeat(3-Math.max(S.h,0))}
+const FL=22000,TONE={s:{m:12},b:{m:-3},k:{m:-25}},fm=n=>n.toLocaleString('id-ID');
+const SP=["Permisi, Ibu. Wah, masih hangat. Bisa Rp #, Bu?","Meskipun nopianya terbatas, bagaimana kalau Rp #, Bu?","Saya mengerti harganya naik akibat gula kelapa. Namun, uang saya terbatas. Rp #, ya, Bu?","Bagaimanapun, ini tawaran terbaik saya, Bu: Rp #.","Bagaimanapun, Rp # sudah pas untuk saya, Bu. Terima kasih."];
+function ch(st){return `<svg class="ch" id="ch" data-s="${st}" viewBox="0 0 240 250" role="img" aria-label="Bu Sri, penjual nopia"><defs><radialGradient id="gs" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#FFE3C6"/><stop offset=".6" stop-color="#F2B88C"/><stop offset="1" stop-color="#D58B5E"/></radialGradient><linearGradient id="gh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D9505A"/><stop offset=".55" stop-color="#A32632"/><stop offset="1" stop-color="#6E1320"/></linearGradient><linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2FA7A0"/><stop offset="1" stop-color="#0F5C5C"/></linearGradient><linearGradient id="gw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C98B52"/><stop offset="1" stop-color="#7A4A22"/></linearGradient><radialGradient id="gi" cx=".4" cy=".35"><stop offset="0" stop-color="#8A5733"/><stop offset="1" stop-color="#2A160C"/></radialGradient></defs>
+<g class="bd"><path d="M22 250C22 205 62 192 120 192C178 192 218 205 218 250Z" fill="url(#gb)"/><path d="M60 207C80 198 100 195 120 195" stroke="#fff" stroke-opacity=".25" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+<g class="hd"><path fill="url(#gh)" d="M120 22C168 22 198 62 196 118C195 168 188 205 120 216C52 205 45 168 44 118C42 62 72 22 120 22Z"/>
+<ellipse cx="120" cy="116" rx="52" ry="58" fill="url(#gs)"/>
+<ellipse class="tn" cx="120" cy="116" rx="52" ry="58" fill="#E63946"/>
+<ellipse cx="105" cy="80" rx="18" ry="8" fill="#fff" opacity=".22" transform="rotate(-20 105 80)"/>
+<ellipse class="bu" cx="82" cy="134" rx="11" ry="6" fill="#FF6F7D"/><ellipse class="bu" cx="158" cy="134" rx="11" ry="6" fill="#FF6F7D"/>
+<g id="eL"><g class="bk"><ellipse rx="11" ry="9" fill="#fff"/><circle cy="1" r="6" fill="url(#gi)"/><circle cy="1" r="3" fill="#111"/><circle cx="-2" cy="-2" r="1.8" fill="#fff"/></g></g>
+<g id="eR"><g class="bk"><ellipse rx="11" ry="9" fill="#fff"/><circle cy="1" r="6" fill="url(#gi)"/><circle cy="1" r="3" fill="#111"/><circle cx="-2" cy="-2" r="1.8" fill="#fff"/></g></g>
+<path class="ha" d="M86 114Q97 102 108 114M132 114Q143 102 154 114" stroke="#3A2416" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+<path id="bl" d="M-17 2Q0 -8 17 2" stroke="#3A2416" stroke-width="5.5" fill="none" stroke-linecap="round"/><path id="br" d="M-17 2Q0 -8 17 2" stroke="#3A2416" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+<path d="M120 118q-6 14 0 19q6 -1 9 -5" stroke="#9B5A33" stroke-opacity=".6" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="119" cy="135" rx="4" ry="2" fill="#fff" opacity=".35"/>
+<g class="mo m0"><path d="M103 150Q120 144 137 150Q140 170 120 172Q100 170 103 150Z" fill="#6B1620"/><path d="M108 151Q120 148 132 151V157Q120 154 108 157Z" fill="#fff"/><ellipse cx="120" cy="167" rx="9" ry="4" fill="#E0707D"/></g>
+<path class="mo m1" d="M103 162Q120 146 137 162" stroke="#8A2A2A" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+<path class="mo m2" d="M105 155Q120 158 135 155" stroke="#9B3A3A" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+<path class="mo m3" d="M101 152Q120 170 139 152" stroke="#B02F3A" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+<g class="mo m4"><path d="M99 150Q120 180 141 150Q120 156 99 150Z" fill="#7A1C24"/><path d="M104 151Q120 158 136 151L134 156Q120 162 106 156Z" fill="#fff"/></g>
+<path class="vn" d="M152 76q7 -2 9 -9M152 76q-2 -7 -9 -9M152 76q7 2 9 9M152 76q-2 7 -9 9" stroke="#E63946" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+<path d="M60 150C66 185 90 205 120 212M180 150C174 185 150 205 120 212" stroke="#000" stroke-opacity=".18" stroke-width="3" fill="none"/><path d="M68 66C84 40 118 30 152 36" stroke="#fff" stroke-opacity=".22" stroke-width="5" fill="none" stroke-linecap="round"/>
+<g class="sm"><circle cx="42" cy="98" r="7" fill="#fff" opacity=".85"/><circle cx="33" cy="86" r="5" fill="#fff" opacity=".7"/></g><g class="sm" style="animation-delay:.5s"><circle cx="198" cy="98" r="7" fill="#fff" opacity=".85"/><circle cx="207" cy="86" r="5" fill="#fff" opacity=".7"/></g>
+<g transform="translate(58 62)"><path class="st" d="M0 -9L2.5 -2.5L9 0L2.5 2.5L0 9L-2.5 2.5L-9 0L-2.5 -2.5Z" fill="#FFC93C"/></g><g transform="translate(184 54)"><path class="st" d="M0 -7L2 -2L7 0L2 2L0 7L-2 2L-7 0L-2 -2Z" fill="#fff"/></g></g>
+<rect y="228" width="240" height="22" fill="url(#gw)"/><rect y="228" width="240" height="4" fill="#E8B77A"/>
+<rect x="14" y="212" width="62" height="18" rx="4" fill="#D9A066" stroke="#8A5A2A" stroke-width="2"/><circle cx="30" cy="210" r="8" fill="#E6B873" stroke="#A9702E" stroke-width="2"/><circle cx="46" cy="208" r="8" fill="#E6B873" stroke="#A9702E" stroke-width="2"/><circle cx="62" cy="210" r="8" fill="#E6B873" stroke="#A9702E" stroke-width="2"/>
+<rect x="164" y="212" width="62" height="18" rx="4" fill="#D9A066" stroke="#8A5A2A" stroke-width="2"/><circle cx="182" cy="210" r="8" fill="#E6B873" stroke="#A9702E" stroke-width="2"/><circle cx="198" cy="208" r="8" fill="#E6B873" stroke="#A9702E" stroke-width="2"/><circle cx="212" cy="210" r="8" fill="#E6B873" stroke="#A9702E" stroke-width="2"/></svg>`}
+const stt=m=>m>=80?4:m>=60?3:m>=40?2:m>=20?1:0,BG=['linear-gradient(#FF9C8F,#E63946)','linear-gradient(#FFD8B0,#F2A37C)','linear-gradient(#FFE9A8,#FFC93C)','linear-gradient(#FFF3B0,#FFD54F)','linear-gradient(#FFF7C2,#FFE066)'];
+const SE=[{s:"Permisi, Ibu. Wah, nopianya masih hangat. Bisa Rp #, Bu?",b:"Rp # ya, Bu.",k:"Mahal banget! Rp # saja, kalau tidak ya sudah!"},
+{s:"Meskipun nopianya terbatas, bagaimana kalau Rp #, Bu? Saya beli dua kotak.",b:"Kurangin dong, Rp # aja.",k:"Jangan pelit, Bu! Rp # itu sudah untung banyak."},
+{s:"Saya mengerti harganya naik akibat gula kelapa, Bu. Namun, uang saya terbatas. Rp #, ya?",b:"Rp # deh, Bu. Biasanya juga segitu.",k:"Di lapak sebelah cuma Rp #! Ibu mau ambil untung berapa sih?"},
+{s:"Bagaimanapun, nopia Ibu paling enak. Rp # saja ya, Bu, nanti saya kembali lagi.",b:"Ya sudah, Rp # terakhir.",k:"Rp # atau saya pergi! Jangan buang waktu saya."},
+{s:"Baik, Bu. Sebab uang saya tinggal segitu, bagaimana kalau Rp #? Terima kasih, Bu.",b:"Ayolah, Rp # ya.",k:"Rp #! Titik! Ibu ini susah sekali."}];
+function sf(){$('#ch').dataset.s=stt(S.mood);$('.facewrap').style.background=BG[stt(S.mood)];$('#md').style.width=S.mood+'%'}
+function react(e,c){const r=document.createElement('span');r.className='react '+c;r.textContent=e;$('.facewrap').appendChild(r);setTimeout(()=>r.remove(),1400)}
+function q2(){const mx=S.ask,v=Math.max(10000,Math.round((mx-5000)/1000)*1000),st=stt(S.mood);S.of=v;view(`${bar()}<p class="who">Tawaran ${S.i+1} dari ${S.n}. Sapa dengan sopan, beri alasan, dan jangan menawar terlalu rendah.</p><div class="scene"><div class="facewrap" style="background:${BG[st]}">${ch(st)}</div><div class="bubble" id="bb">${S.i?S.sb:'Selamat pagi, Mas! Nopia hangat, '+rp(S.ask)+' sekotak.'}</div></div><div class="status"><span class="board" id="pr">${rp(S.ask)}</span><span>Kesal</span><div class="mood" title="Emosi penjual"><i id="md" style="width:${S.mood}%"></i></div><span>Senang</span></div><p class="who">Geser harga tawaranmu, lalu pilih kalimat menawarnya:</p><div class="offer"><b id="of">${rp(v)}</b><input type="range" id="rg" min="10000" max="${mx}" step="1000" value="${v}" oninput="S.of=+this.value;$('#of').textContent=rp(S.of);document.querySelectorAll('.pv').forEach(x=>x.textContent=fm(S.of))" aria-label="Harga tawaran"></div>${sh(['s','b','k']).map(k=>`<button class="opt" onclick="a2('${k}',this)">“${SE[S.i][k].replace('#','<b class="pv">'+fm(v)+'</b>')}”</button>`).join('')}<div id="fb"></div>`)}
+function a2(t,bt){bt.style.background='#FFF1B8';const o=S.of,ask=S.ask;let d=TONE[t].m;if(o<FL)d-=Math.round((FL-o)/1000*3);if(o<FL-5000)d-=15;if(o>=FL)d+=3;
+S.mood=Math.max(0,Math.min(100,S.mood+d));document.querySelectorAll('.opt,#rg').forEach(x=>x.disabled=true);
+const th=FL+Math.round((50-S.mood)/10)*500,deal=(o>=th||o>=ask)&&S.mood>0;let say;
+if(S.mood<=0){say='Sudah, sudah! Saya tidak mau menjual kepada orang seperti ini. Lapak tutup!';S.h=0}
+else if(deal){S.pr=o;S.i=S.n-1;S.sc+=300+Math.round((30000-o)/1000*40)+S.mood*3;say=S.mood>=60?`Baik, Mas, sepakat ${rp(o)}. Terima kasih sudah menawar dengan sopan!`:`Ya sudah, ${rp(o)}. Lain kali lebih sopan ya, Mas.`}
+else{let a=Math.round((ask+Math.max(o,FL))/2/500)*500;if(S.mood<40)a=ask-500;if(t=='s')a-=500;S.ask=Math.max(FL+500,Math.min(ask,a));
+say=S.mood>=60?`Wah, kamu sopan sekali. Baiklah, ${rp(S.ask)} saja, sebab nopianya baru matang.`:S.mood>=40?`Belum bisa, Mas. ${rp(S.ask)}, sebab bahan-bahannya naik akibat musim hujan.`:S.mood>=20?`Harga segitu rugi, Mas! ${rp(S.ask)}, tidak kurang lagi.`:`Dengan nada begitu? ${rp(S.ask)}, ambil atau pergi!`;
+if(S.i==S.n-1){S.nd=1;S.h=0;say+=' Sepertinya kita belum cocok. Lain kali saja, Mas.'}}
+if(d<=-15){S.h=Math.max(0,S.h-1);bad();shk();react('!','bad')}else if(d>=10){ok();react('♥','good')}else snd(300);
+S.sb=say;$('#bb').textContent=say;$('#pr').textContent=rp(deal?o:S.ask);sf();
+const e=d>=10?'Penjual tersenyum. Nada sopan membuat harga lebih mudah turun.':d>=0?'Penjual biasa saja.':d>-15?'Penjual mulai kesal.':'Penjual tersinggung! Tawaranmu terlalu rendah atau terlalu kasar.';
+fb(d>=0,'Nada '+({s:'sopan',b:'biasa',k:'sadis'})[t]+'. '+e,deal?'Sepakat!':d>=0?'Bagus!':'Hati-hati!');upd()}
+function q3(){S.pos=0;S.bank=sh(S.qs[S.i][1].map((s,k)=>[s,k]));r3()}
+function r3(){const t=S.qs[S.i];view(`${bar()}<p class="stage"><b>${t[0]}</b></p><p class="who">Tekan kalimat sesuai urutan: pendapat, alasan, sisi lain, penutup.</p>${LB.map((l,k)=>`<div class="slot${k<S.pos?' on':''}"><small>${l}</small>${k<S.pos?t[1][k]:''}</div>`).join('')}${S.pos<4?S.bank.filter(x=>x[1]>=S.pos).map(x=>`<button class="opt" onclick="a3(${x[1]})">${x[0]}</button>`).join(''):'<div class="fb g"><b>Pendapatmu lengkap!</b> Empat langkah sudah tersusun rapi.</div><button class="btn" onclick="nx()">Lanjut</button>'}`)}
+function a3(k){if(k==S.pos){S.pos++;S.sc+=50;ok();if(S.pos==4)S.sc+=100;r3()}else{S.h--;S.st=0;bad();if(S.h<=0)return fail();r3();shk()}}
+function done(){S.tot=S.sc;if(S.lv==2)return final();const x=S.lv==1?`<p>Harga akhir nopia: <b>${rp(S.pr)}</b>${S.pr<=24000?'. Tawaran hebat!':'. Coba tawar lebih berani lain kali.'}</p>`:'';view(`<div class="big">${'⭐'.repeat(Math.max(S.h,1))}</div><h2>Level ${S.lv+1} selesai!</h2><p>Skor kamu sekarang ${S.sc}.</p>${x}<button class="btn" onclick="go(${S.lv+1})">Level berikutnya</button>`);conf()}
+function fail(){const m=S.lv==1&&S.mood<=0,n=S.lv==1&&S.nd;view(`<div class="big">${m?'🤬':'😅'}</div><h2>${m?'Penjual sudah kesal':n?'Belum sepakat':'Nyawamu habis'}</h2><p>${m?'Ucapanmu kurang sopan, jadi lapak ditutup.':n?'Lima tawaran sudah habis dan harga belum cocok. Menyapa dengan sopan dan tidak menawar terlalu rendah akan membantu.':'Tidak apa-apa, pedagang hebat juga belajar dari salah.'} Ulangi level ini dan perhatikan penjelasannya.</p><button class="btn" onclick="go(${S.lv})">Coba lagi</button><button class="btn" style="background:#fff;color:var(--ink)" onclick="home()">Kembali ke awal</button>`)}
+function final(){const s=S.sc;if(s>best){best=s;try{localStorage.setItem('pk_best',s)}catch(e){}}const r=s>=1900?['👑','Raja tawar-menawar']:s>=1200?['🏅','Juragan pasar']:['🌱','Pedagang pemula'];view(`<div class="big">${r[0]}</div><h2>${r[1]}</h2><p class="stage" style="text-align:center">Skor akhir: <b>${s}</b><br>Skor terbaik: ${best}</p><p>Kamu sudah memakai sebab, akibat, meskipun, walaupun, namun, sebaliknya, dan bagaimanapun. Sekarang ajak temanmu bermain peran di kelas.</p><button class="btn" onclick="S={tot:0};go(0)">Main lagi</button>`);conf()}
+home();
+</script>
+</body>
+</html>
